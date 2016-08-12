@@ -11,7 +11,7 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/todos", TodoIndex)
-	//router.HandleFunc("/todos/{todoID}",TodoShow)
+	router.HandleFunc("/todos/{todoID}", TodoShow)
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
@@ -24,7 +24,15 @@ func TodoIndex(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Showing list of all Todos")
 }
 
-/*
-func TodoShow(w http.Req)
+func TodoShow(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
 
-*/
+	if len(vars) != 1 {
+		panic("bad request")
+	}
+
+	todoId := vars["todoID"]
+	fmt.Println(todoId)
+	fmt.Fprintf(w, "Showing details of todo with id : ", todoId)
+
+}
